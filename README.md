@@ -1,5 +1,12 @@
 # DescriptiveMapPoints Add-in for ArcGIS Pro
 
+## Demo Video
+
+For a quick demonstration of the DescriptiveMapPoints add-in, watch the video below:
+
+
+https://github.com/user-attachments/assets/ce420610-2b7f-45c1-894c-080162a3242d
+
 ## Overview
 
 DescriptiveMapPoints is a custom ArcGIS Pro add-in that allows users to annotate maps with descriptive points. Users can add, edit, delete, and zoom to points on the map, with each point having an associated description.
@@ -87,10 +94,5 @@ DescriptiveMapPoints is a custom ArcGIS Pro add-in that allows users to annotate
 - **Add-in not appearing**: Ensure ArcGIS Pro is restarted after installation.
 - **XAML errors**: If you encounter XAML-related errors, rebuild the solution in Visual Studio and run it again.
 
-## Demo Video
 
-For a quick demonstration of the DescriptiveMapPoints add-in, watch the video below:
-
-
-https://github.com/user-attachments/assets/ce420610-2b7f-45c1-894c-080162a3242d
 
