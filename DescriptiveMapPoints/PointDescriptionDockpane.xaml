@@ -1,0 +1,177 @@
+﻿<UserControl x:Class="DescriptiveMapPoints.PointDescriptionDockpaneView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ui="clr-namespace:DescriptiveMapPoints"
+             xmlns:local="clr-namespace:DescriptiveMapPoints"
+             xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
+             xmlns:maptools="clr-namespace:DescriptiveMapPoints.MapTools"
+             d:DataContext="{d:DesignInstance Type=local:PointDescriptionDockpaneViewModel, IsDesignTimeCreatable=True}"
+             mc:Ignorable="d"
+             d:DesignHeight="400"
+             d:DesignWidth="300">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component/Themes/Default.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <DropShadowEffect x:Key="ShadowEffect"
+                              BlurRadius="8"
+                              ShadowDepth="2"
+                              Opacity="0.2"/>
+
+            <Style x:Key="DockpaneButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"/>
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                <Setter Property="Padding" Value="8,4"/>
+                <Setter Property="MinWidth" Value="80"/>
+                <Setter Property="FontWeight" Value="Normal"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="4"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" Height="30" Margin="0,0,0,10">
+            <TextBlock Text="{Binding Heading}"
+                       Style="{DynamicResource Esri_TextBlockDockPaneHeader}">
+                <TextBlock.ToolTip>
+                    <WrapPanel Orientation="Vertical" MaxWidth="300">
+                        <TextBlock Text="{Binding Heading}" TextWrapping="Wrap"/>
+                    </WrapPanel>
+                </TextBlock.ToolTip>
+            </TextBlock>
+        </DockPanel>
+
+        <Grid Grid.Row="1" Margin="0,0,0,10">
+            <TextBox x:Name="DescriptionInput"
+                     Text="{Binding DescriptionText, UpdateSourceTrigger=PropertyChanged}"
+                     Height="30"
+                     VerticalContentAlignment="Center"
+                     x:FieldModifier="public"/>
+            <TextBlock Text="Enter description..."
+                       Foreground="Gray"
+                       Margin="5,0,0,0"
+                       VerticalAlignment="Center"
+                       IsHitTestVisible="False">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=DescriptionInput}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Grid>
+
+        <Button Grid.Row="2"
+                Content="Add Point"
+                Command="{Binding AddPointCommand}"
+                Style="{StaticResource DockpaneButtonStyle}"
+                Margin="0,0,0,10"/>
+
+        <ListBox Grid.Row="3"
+                 ItemsSource="{Binding Points}"
+                 Margin="0,0,0,10"
+                 Background="Transparent"
+                 BorderThickness="0"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 HorizontalContentAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Margin="0,4"
+                            Padding="16"
+                            Background="White"
+                            CornerRadius="10"
+                            BorderBrush="#DDD"
+                            BorderThickness="1"
+                            Effect="{StaticResource ShadowEffect}"
+                            HorizontalAlignment="Stretch"
+                            MouseLeftButtonUp="Border_MouseLeftButtonUp">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="White"/>
+                                <Setter Property="Cursor" Value="Arrow"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#F0F8FF"/>
+                                        <Setter Property="Cursor" Value="Hand"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Orientation="Vertical" Grid.Column="0">
+                                <TextBlock Text="{Binding Description}"
+                                           FontWeight="SemiBold"
+                                           FontSize="16"
+                                           Foreground="#333"
+                                           TextWrapping="Wrap"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Latitude, StringFormat='Latitude: {0:F6}'}"
+                                           FontSize="12"
+                                           Foreground="#666"/>
+                                <TextBlock Text="{Binding Longitude, StringFormat='Longitude: {0:F6}'}"
+                                           FontSize="12"
+                                           Foreground="#666"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center">
+                                <Button Content="Edit"
+                                        Command="{Binding DataContext.EditPointCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"
+                                        Style="{StaticResource DockpaneButtonStyle}"
+                                        Margin="0,0,8,0"/>
+
+                                <Button Content="Delete"
+                                        Command="{Binding DataContext.DeletePointCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"
+                                        Style="{StaticResource DockpaneButtonStyle}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</UserControl>
