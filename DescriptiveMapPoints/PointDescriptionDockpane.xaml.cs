@@ -25,13 +25,6 @@ namespace DescriptiveMapPoints
             InitializeComponent();
 
         }
-        private void Border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            if (sender is Border border && border.DataContext is PointModel point)
-            {
-                var viewModel = DataContext as PointDescriptionDockpaneViewModel;
-                viewModel?.ZoomToPointCommand.Execute(point);
-            }
-        }
+        
     }
 }
