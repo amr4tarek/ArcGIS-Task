@@ -91,7 +91,6 @@ DescriptiveMapPoints is a custom ArcGIS Pro add-in that allows users to annotate
 
 For a quick demonstration of the DescriptiveMapPoints add-in, watch the video below:
 
-<video width="640" height="360" controls>
-  <source src="demo-video.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+
+https://github.com/user-attachments/assets/ce420610-2b7f-45c1-894c-080162a3242d
+
